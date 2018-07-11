@@ -1,0 +1,20 @@
+canvas {
+    margin: 0 auto;
+    display: block;
+}
+
+h2, #score, #scoreBoard  {
+    display: flex;
+    justify-content: center;
+    font-family: 'Gaegu', cursive;
+}
+
+#score, #scoreBoard  {
+    margin-bottom: 10px;
+}
+
+#score {
+    font-size: 30px;
+}
+
+
