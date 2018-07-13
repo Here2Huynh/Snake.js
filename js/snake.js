@@ -1,5 +1,5 @@
-const canvas = document.getElementById('snake');
-const context = canvas.getContext('2d'); // give methods props
+const canvas = document.getElementById('snake'),
+    context = canvas.getContext('2d'); // give methods props
 
 // base unit (px)
 let box = 32;
@@ -49,28 +49,56 @@ let gameover = false;
 
 
 // control the snake
+// keycodes
+// left = 37
+// up = 38
+// right = 39 
+// down = 40
+
 let currentDirection;
+let turnedThisTurn = false;
+// let keyPressed = {};
+
+// let mapDirection = (event) => {
+//     console.log(event.keyCode)
+//     keyPressed[event.keyCode] = true;
+//     console.log(keyPressed)
+// }
 
 let direction = (event) => {
-    if (event.keyCode === 37 && currentDirection != 'RIGHT') {
+    // console.log(event.keyCode)
+    if (event.keyCode === 37 && currentDirection != 'RIGHT' && !turnedThisTurn) {
         currentDirection = 'LEFT';
-        // console.log('LEFT');
+        // keyPressed[37] = false;
+        console.log('LEFT');
+        turnedThisTurn = true;
     }
-    else if (event.keyCode === 38 && currentDirection !='DOWN') {
+    else if (event.keyCode === 38  === true && currentDirection !='DOWN' && !turnedThisTurn) {
         currentDirection = 'UP';
-        // console.log('UP');
+        // keyPressed[38] = false;
+        console.log('UP');
+        turnedThisTurn = true;
     }
-    else if (event.keyCode === 39 && currentDirection != 'LEFT') {
+    else if (event.keyCode === 39  === true && currentDirection != 'LEFT' && !turnedThisTurn) {
         currentDirection = 'RIGHT';
-        // console.log('RIGHT');
+        // keyPressed[39] = false;
+        console.log('RIGHT');
+        turnedThisTurn = true;
     }
-    else if (event.keyCode === 40 && currentDirection != 'UP') {
+    else if (event.keyCode === 40  === true && currentDirection != 'UP' && !turnedThisTurn) {
         currentDirection = 'DOWN';
-        // console.log('DOWN');
+        // keyPressed[40] = false;
+        console.log('DOWN');
+        turnedThisTurn = true;
     }
 }
 
-document.addEventListener('keydown', direction);
+// document.addEventListener('keydown', mapDirection);
+
+document.addEventListener('keydown', direction)
+
+
+
 
 
 // draw images 
@@ -93,10 +121,6 @@ let draw = () => {
 
     snakeMovements();
 
-    // draws the score
-    // context.fillStyle = 'black';
-    // context.font = "45px Changa One";
-    // context.fillText(score, 2 * box, 1.6 * box);
 }
 
 let snakeMovements = () => {
@@ -106,21 +130,25 @@ let snakeMovements = () => {
     
     // determine direction from user input
     if (currentDirection === 'LEFT') {
+        turnedThisTurn = false;
         snakeX -= box;
         left.play();
         // console.log('LEFT');
     }
     if (currentDirection === 'UP') {
+        turnedThisTurn = false;
         snakeY -= box;
         up.play();
         // console.log('UP');
     }
     if (currentDirection === 'RIGHT') {
+        turnedThisTurn = false;
         snakeX += box;
         right.play();
         // console.log('RIGHT');
     }
     if (currentDirection === 'DOWN') {
+        turnedThisTurn = false;
         snakeY += box;
         down.play();
         // console.log('DOWN');
@@ -153,17 +181,15 @@ let snakeMovements = () => {
     if (checkCollision(newHead, snake) 
             || snakeX === -32 ||  snakeX === 19 * box
             || snakeY === 19 * box || snakeY === -32) {
-        console.log('snake head itself');
+        console.log('snake died');
         dead.play();
-        clearInterval(game);
-        // gameOver = true;
-        // if (gameOver) {
-        //     let resetGame = window.confirm(
-        //         'Looks like you died. Do you want to try get more ice cream?')
-        //     (resetGame)
-        //         ? console.log(1)
-        //         : console.log(2)
-        // }
+        clearInterval(game);    
+        setTimeout(() => {
+            (window.confirm(
+            'Looks like you died. Do you want to try get more ice cream?'))
+                ? location.reload()
+                : console.log('Game ended')
+        }, 10)
     }
 
     // add new head to front of the array
@@ -181,6 +207,7 @@ function checkCollision(newSnakeHead, snake) {
     for ( let i = 0; i < snake.length; i++) {
         if (newSnakeHead.x === snake[i].x && 
             newSnakeHead.y === snake[i].y) {
+                console.log('snake collided with itself')
                 return true;
             }
     }
@@ -188,14 +215,8 @@ function checkCollision(newSnakeHead, snake) {
 }
 
 
-let game = setInterval(draw, 110);
+let game = setInterval(draw, 100);
 document.getElementById('score').textContent = score;
-
-
-
-// $(document).ready(function(){
-//     $('score').html(score);
-// })
 
 
 
@@ -209,11 +230,7 @@ document.getElementById('score').textContent = score;
 
 
 
-// keycodes
-// left = 37
-// up = 38
-// right = 39 
-// down = 40
+
 
 
 // snake moving 
@@ -221,8 +238,6 @@ document.getElementById('score').textContent = score;
 // and add the new position at the front 
 // Array.unshift(); adds a new head to Array
 // Array.pop remove the last item in the Array
-
-// snake.pop();
 
 
 // game over conditions
@@ -237,4 +252,5 @@ document.getElementById('score').textContent = score;
 
 // Things to do
 // -alert window when game over to and allow user to restart 
-// -controls via voice 
+// -controls via voice possibly using IBM Watson API
+
