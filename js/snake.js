@@ -56,44 +56,33 @@ let gameover = false;
 // down = 40
 
 let currentDirection;
-let turnedThisTurn = false;
-// let keyPressed = {};
-
-// let mapDirection = (event) => {
-//     console.log(event.keyCode)
-//     keyPressed[event.keyCode] = true;
-//     console.log(keyPressed)
-// }
+// let turnedThisTurn = false;
+let inputQueue = [];
 
 let direction = (event) => {
     // console.log(event.keyCode)
-    if (event.keyCode === 37 && currentDirection != 'RIGHT' && !turnedThisTurn) {
-        currentDirection = 'LEFT';
-        // keyPressed[37] = false;
+    if (event.keyCode === 37 && currentDirection != 'RIGHT') {
+        // currentDirection = 'LEFT';
+        inputQueue.push('LEFT');
         console.log('LEFT');
-        turnedThisTurn = true;
     }
-    else if (event.keyCode === 38  === true && currentDirection !='DOWN' && !turnedThisTurn) {
-        currentDirection = 'UP';
-        // keyPressed[38] = false;
+    else if (event.keyCode === 38  === true && currentDirection !='DOWN') {
+        // currentDirection = 'UP';
+        inputQueue.push('UP');
         console.log('UP');
-        turnedThisTurn = true;
     }
-    else if (event.keyCode === 39  === true && currentDirection != 'LEFT' && !turnedThisTurn) {
-        currentDirection = 'RIGHT';
-        // keyPressed[39] = false;
+    else if (event.keyCode === 39  === true && currentDirection != 'LEFT') {
+        // currentDirection = 'RIGHT';
+        inputQueue.push('RIGHT');
         console.log('RIGHT');
-        turnedThisTurn = true;
     }
-    else if (event.keyCode === 40  === true && currentDirection != 'UP' && !turnedThisTurn) {
-        currentDirection = 'DOWN';
-        // keyPressed[40] = false;
-        console.log('DOWN');
-        turnedThisTurn = true;
+    else if (event.keyCode === 40  === true && currentDirection != 'UP') {
+        // currentDirection = 'DOWN';
+        inputQueue.push('DOWN');
+        console.log(inputQueue);
     }
 }
 
-// document.addEventListener('keydown', mapDirection);
 
 document.addEventListener('keydown', direction)
 
@@ -119,6 +108,7 @@ let draw = () => {
     // draws the food
     context.drawImage(foodImage, food.x, food.y); 
 
+    // handles all the snake moments 
     snakeMovements();
 
 }
@@ -128,6 +118,10 @@ let snakeMovements = () => {
     let snakeX = snake[0].x;
     let snakeY = snake[0].y;
     
+    if (inputQueue.length) {
+        currentDirection = inputQueue.shift();
+    }
+
     // determine direction from user input
     if (currentDirection === 'LEFT') {
         turnedThisTurn = false;
